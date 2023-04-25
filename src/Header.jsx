@@ -1,11 +1,10 @@
-
 function Header(props) {
   const moon = () => {
     props.setDark(!props.dark);
-    document.body.style.backgroundColor = props.dark ? "#F2F2F2" : "black" ;
+    document.body.style.backgroundColor = props.dark ? "#F2F2F2" : "black";
   };
   return (
-    <header className={props.dark ? "darkMode" :"lightMode" } >
+    <header className={props.dark ? "darkMode" : "lightMode"}>
       <div className="todo_icon">
         <svg
           width="109"
@@ -48,9 +47,12 @@ function Header(props) {
           />
         </svg>
       </div>
-      <div className={props.dark ? "check_input_dark":"check_input" }>
-        <div className={props.dark?"check_dark":"check"} onClick={props.makeChecked}>
-          <div className={props.check ? "active" : "noActive"}>
+      <div className={props.dark ? "check_input_dark" : "check_input"}>
+        <div
+          className={props.dark && props.status ? "check_dark active" :props.dark && !props.status ? "check_dark" : !props.dark && props.status ? "active" :!props.dark && !props.status ?'check':'' }
+          onClick={props.makeChecked}
+        >
+          {/* <div className={props.check ? "active" : "noActive"}>
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9">
               <path
                 fill="none"
@@ -59,12 +61,12 @@ function Header(props) {
                 d="M1 4.304L3.696 7l6-6"
               />
             </svg>
-          </div>
+          </div> */}
         </div>
         <input
           type="text"
           name="input"
-          className={props.dark? "input_dark":"input"}
+          className={props.dark ? "input_dark" : "input"}
           onChange={props.keypress}
           value={props.value}
           onKeyDown={props.onkeyPress}

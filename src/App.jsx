@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import getAllTodo from "./Get";
-import PostTodo from "./Post";
+import getAllTodo from "./requests/Get";
+import PostTodo from "./requests/Post";
+import updateTodo from "./requests/put";
 function App() {
+  const [id, setId] = useState("");
+  const [status, setStatus] = useState("");
   const [inputvalue, setinputValue] = useState("");
   const [tasks, setTasks] = useState([]);
   const [check, setCheck] = useState(false);
@@ -17,13 +20,14 @@ function App() {
   const getdata = async () => {
     const data = await getAllTodo();
     setTasks(data);
-    console.log(tasks);
-    console.log(All);
-  };
-  const postData = async () =>{
-     await PostTodo(inputvalue,check)
-  }
 
+  };
+  const postData = async () => {
+    await PostTodo(inputvalue, check);
+  };
+  const updateStatus = async () => {
+    await updateTodo(id, status);
+  };
   useEffect(() => {
     const getdata = async () => {
       const data = await getAllTodo();
@@ -31,7 +35,6 @@ function App() {
     };
     getdata();
   }, []);
-
 
   const [active, setActive] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -41,7 +44,7 @@ function App() {
   };
   const onkeyPress = async (event) => {
     if (event.key === "Enter" && inputvalue != "") {
-      await postData()
+      await postData();
       getdata();
       setinputValue("");
       setCheck(false);
@@ -51,7 +54,28 @@ function App() {
   const makeChecked = () => {
     setCheck(!check);
   };
+  const changeToactive = async (event) => {
+    if (
+      event.target.classList.contains("check") ||
+      event.target.classList.contains("check_dark") ||
+      event.target.classList.contains("active")
+    ) {
+      const id = parseInt(event.target.id);
 
+      const indx = tasks.findIndex((element) => element.id === id);
+    
+      if (indx !== -1) {
+        setId(id);
+        setStatus(!tasks[indx].status);
+      
+
+        await updateStatus()
+        getdata()
+
+       
+      }
+    }
+  };
   return (
     <div className="App">
       <Header
@@ -60,10 +84,12 @@ function App() {
         value={inputvalue}
         makeChecked={makeChecked}
         check={check}
+        status={check}
         dark={dark}
         setDark={setDark}
       />
       <Main
+        changeToactive={changeToactive}
         dark={dark}
         setDark={setDark}
         check={check}

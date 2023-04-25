@@ -97,17 +97,19 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: linear-gradient(
+
+  background-image: url('./images/icon.svg'),linear-gradient(
     rgba(85, 221, 255, 1) 0%,
     rgba(192, 88, 243, 1) 100%
   );
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
 }
 
+
 .noActive {
-  display: none;
+  background-color:rgba(255, 255, 255, 1);
 }
 .container {
   display: flex;

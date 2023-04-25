@@ -16,31 +16,8 @@ function Main(props) {
     props.setAll(false);
   };
 
-  const changeToactive = (event) => {
-    if (
-      event.target.classList.contains("check") ||
-      event.target.classList.contains("check_dark")
-    ) {
-      const id = parseInt(event.target.id);
-      const indx = props.tasks.findIndex((element) => element.id === id);
 
-      let array = [...props.tasks];
-      array[indx].status = !array[indx].status;
-      props.setTasks(array);
-    }
 
-    // const  filtertask = props.tasks.filter((task) => task.id === ID)
-  };
-  const changeToNoActive = (event) => {
-    if (event.target.classList.contains("active")) {
-      const id = parseInt(event.target.id);
-      const indx = props.tasks.findIndex((element) => element.id === id);
-
-      let array = [...props.tasks];
-      array[indx].active = !array[indx].active;
-      props.setTasks(array);
-    }
-  };
   const remove = (event) => {
     if (event.target.classList.contains("remove")) {
       const id = parseInt(event.target.id);
@@ -52,7 +29,7 @@ function Main(props) {
   };
   const clearCompleted = () => {
     let array = [];
-    array = props.Tasks.filter((element) => !element.status)
+    array = props.Tasks.filter((element) => !element.status);
     props.setTasks(array);
   };
   if (props.tasks.length > 0) {
@@ -60,36 +37,25 @@ function Main(props) {
       <div className="main_container">
         <div className={props.dark ? "dark_container" : "container"}>
           <main className={props.dark ? "dark_main" : "main"}>
-            {props.tasks.map((element,indx) => {
+            {props.tasks.map((element, indx) => {
               return (
                 <div key={indx}>
                   <div className={props.dark ? "dark_box" : "box"}>
                     <div
-                      className={props.dark ? "check_dark" : "check"}
-                      onClick={changeToactive}
+                      className={
+                        props.dark && element.status
+                          ? "check_dark active"
+                          : props.dark && !element.status
+                          ? "check_dark"
+                          : !props.dark && element.status
+                          ? "active"
+                          : !props.dark && !element.status
+                          ? "check"
+                          : ""
+                      }
+                      onClick={props.changeToactive}
                       id={element.id}
-                    >
-                      <div
-                        className={element.status ? "active" : "noActive"}
-                        onClick={changeToNoActive}
-                        id={element.id}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="11"
-                          height="9"
-                          id={element.id}
-                          onClick={changeToNoActive}
-                        >
-                          <path
-                            fill="none"
-                            stroke="#FFF"
-                            strokeWidth="2"
-                            d="M1 4.304L3.696 7l6-6"
-                          />
-                        </svg>
-                      </div>
-                    </div>
+                    ></div>
                     <p
                       className={
                         element.status
@@ -127,19 +93,43 @@ function Main(props) {
               >{`${props.tasks.length} items left`}</p>
               <div className="main_filter">
                 <button
-                  className={props.dark ? props.all ? "btn_clicked_dark": "dark_btn" : props.all ? "btn_clicked_light":"btn"}
+                  className={
+                    props.dark
+                      ? props.all
+                        ? "btn_clicked_dark"
+                        : "dark_btn"
+                      : props.all
+                      ? "btn_clicked_light"
+                      : "btn"
+                  }
                   onClick={ALL}
                 >
                   All
                 </button>
                 <button
-                  className={props.dark ? props.active ? "btn_clicked_dark": "dark_btn" : props.active ? "btn_clicked_light":"btn"}
+                  className={
+                    props.dark
+                      ? props.active
+                        ? "btn_clicked_dark"
+                        : "dark_btn"
+                      : props.active
+                      ? "btn_clicked_light"
+                      : "btn"
+                  }
                   onClick={Active}
                 >
                   Active
                 </button>
                 <button
-                  className={props.dark ? props.completed ? "btn_clicked_dark": "dark_btn" : props.completed ? "btn_clicked_light":"btn"}
+                  className={
+                    props.dark
+                      ? props.completed
+                        ? "btn_clicked_dark"
+                        : "dark_btn"
+                      : props.completed
+                      ? "btn_clicked_light"
+                      : "btn"
+                  }
                   onClick={Completed}
                 >
                   Completed
