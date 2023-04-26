@@ -17,16 +17,6 @@ function Main(props) {
   };
 
 
-
-  const remove = (event) => {
-    if (event.target.classList.contains("remove")) {
-      const id = parseInt(event.target.id);
-      const indx = props.tasks.findIndex((element) => element.id === id);
-      let array = [...props.tasks];
-      array.splice(indx, 1);
-      props.setTasks(array);
-    }
-  };
   const clearCompleted = () => {
     let array = [];
     array = props.Tasks.filter((element) => !element.status);
@@ -75,7 +65,7 @@ function Main(props) {
                       height="18"
                       className="remove"
                       id={element.id}
-                      onClick={remove}
+                      onClick={props.remove}
                     >
                       <path
                         fill="#494C6B"

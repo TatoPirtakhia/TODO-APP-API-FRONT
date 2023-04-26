@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import getAllTodo from "./requests/Get";
 import PostTodo from "./requests/Post";
 import updateTodo from "./requests/put";
+import deleteTodo from "./requests/delete";
 function App() {
   const [id, setId] = useState("");
   const [status, setStatus] = useState("");
@@ -17,17 +18,15 @@ function App() {
   const Completed = tasks.filter((element) => element.status);
   const All = tasks;
 
-  const getdata = async () => {
-    const data = await getAllTodo();
-    setTasks(data);
-
-  };
   const postData = async () => {
     await PostTodo(inputvalue, check);
   };
-  const updateStatus = async () => {
+  const updateStatus = async (id, status) => {
     await updateTodo(id, status);
   };
+  const deletetodo = async (id) =>{
+    await deleteTodo(id)
+  }
   useEffect(() => {
     const getdata = async () => {
       const data = await getAllTodo();
@@ -44,43 +43,49 @@ function App() {
   };
   const onkeyPress = async (event) => {
     if (event.key === "Enter" && inputvalue != "") {
-      await postData();
-      getdata();
+      setTasks([
+        ...tasks,
+        {
+          title: inputvalue,
+          status: check,
+          id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
+        },
+      ]);
       setinputValue("");
       setCheck(false);
+      await postData();
     }
   };
 
   const makeChecked = () => {
     setCheck(!check);
   };
+
   const changeToactive = async (event) => {
-    if (
-      event.target.classList.contains("check") ||
-      event.target.classList.contains("check_dark") ||
-      event.target.classList.contains("active")
-    ) {
+    const id = parseInt(event.target.id);
+    const indx = tasks.findIndex((element) => element.id === id);
+    let array = [...tasks];
+    array[indx].status = !array[indx].status;
+    console.log(array[indx].status)
+    setTasks(array);
+    await updateStatus(id, array[indx].status);
+  };
+  const remove = async (event) => {
+  
       const id = parseInt(event.target.id);
-
       const indx = tasks.findIndex((element) => element.id === id);
-    
-      if (indx !== -1) {
-        setId(id);
-        setStatus(!tasks[indx].status);
-      
-
-        await updateStatus()
-        getdata()
-
-       
-      }
-    }
+      let array = [...tasks];
+      array.splice(indx, 1);
+      setTasks(array);
+      console.log(id)
+      await deletetodo(id);
   };
   return (
     <div className="App">
       <Header
         onkeyPress={onkeyPress}
         keypress={keyPress}
+
         value={inputvalue}
         makeChecked={makeChecked}
         check={check}
@@ -90,6 +95,8 @@ function App() {
       />
       <Main
         changeToactive={changeToactive}
+        remove={remove}
+        deletetodo={deletetodo}
         dark={dark}
         setDark={setDark}
         check={check}
