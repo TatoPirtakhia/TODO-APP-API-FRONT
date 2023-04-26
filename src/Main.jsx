@@ -17,11 +17,7 @@ function Main(props) {
   };
 
 
-  const clearCompleted = () => {
-    let array = [];
-    array = props.Tasks.filter((element) => !element.status);
-    props.setTasks(array);
-  };
+
   if (props.tasks.length > 0) {
     return (
       <div className="main_container">
@@ -127,7 +123,7 @@ function Main(props) {
               </div>
               <button
                 className={props.dark ? "button_clear_dark" : "button_clear"}
-                onClick={clearCompleted}
+                onClick={props.clearCompleted}
               >
                 Clear Completed
               </button>

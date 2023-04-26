@@ -7,6 +7,7 @@ import getAllTodo from "./requests/Get";
 import PostTodo from "./requests/Post";
 import updateTodo from "./requests/put";
 import deleteTodo from "./requests/delete";
+import deleteAll from "./requests/deleteAll";
 function App() {
   const [id, setId] = useState("");
   const [status, setStatus] = useState("");
@@ -26,6 +27,9 @@ function App() {
   };
   const deletetodo = async (id) =>{
     await deleteTodo(id)
+  }
+  const deleteCompleted = async () =>{
+    await deleteAll(true)
   }
   useEffect(() => {
     const getdata = async () => {
@@ -80,6 +84,12 @@ function App() {
       console.log(id)
       await deletetodo(id);
   };
+  const clearCompleted = async () => {
+    let array = [];
+    array = tasks.filter((element) => !element.status);
+    setTasks(array);
+    await deleteCompleted()
+  };
   return (
     <div className="App">
       <Header
@@ -95,6 +105,7 @@ function App() {
       />
       <Main
         changeToactive={changeToactive}
+        clearCompleted={clearCompleted}
         remove={remove}
         deletetodo={deletetodo}
         dark={dark}
